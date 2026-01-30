@@ -15,7 +15,7 @@ export class IconoirProviderService implements IconProvider {
   readonly baseUrl = 'https://api.github.com/repos/SharadJ19/free-svg-icons/contents/iconoir-regular-icons';
   readonly iconPath = 'iconoir-regular-icons';
 
-  private readonly GITHUB_TOKEN = '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';
+  private readonly GITHUB_TOKEN = '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';
 
   constructor(private http: HttpClient) {}
 
