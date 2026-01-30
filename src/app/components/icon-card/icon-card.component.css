@@ -1,0 +1,87 @@
+/* src\app\components\icon-card\icon-card.component.css */
+
+.icon-card {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.icon-card:hover {
+  border-color: #ff9100;
+  transform: translateY(-2px);
+}
+
+.icon-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: #fafafa;
+  flex: 1;
+}
+
+.icon-preview svg {
+  width: 40px;
+  height: 40px;
+  max-width: 100%;
+  max-height: 100%;
+  color: #333;
+}
+
+.icon-overlay {
+  padding: 8px 10px;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.icon-name {
+  font-size: 11px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.icon-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.download-btn {
+  background: #ff9100;
+  color: white;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.download-btn mat-icon {
+  font-size: 18px;
+  line-height: 20px;
+}
+
+.download-btn:hover {
+  background: #e68200;
+}
+
+.provider-badge {
+  font-size: 10px;
+  background: rgba(255, 145, 0, 0.1);
+  color: #ff9100;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
