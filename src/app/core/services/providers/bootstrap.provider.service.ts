@@ -15,7 +15,7 @@ export class BootstrapProviderService implements IconProvider {
   readonly baseUrl = 'https://api.github.com/repos/SharadJ19/free-svg-icons/contents/bootstrap-icons';
   readonly iconPath = 'bootstrap-icons';
 
-  private readonly GITHUB_TOKEN = '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';
+  private readonly GITHUB_TOKEN = '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';
 
   constructor(private http: HttpClient) {}
 
