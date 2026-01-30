@@ -1,0 +1,113 @@
+<!-- src\app\pages\home\home.component.html -->
+
+<div class="container">
+  <!-- Header -->
+  <header class="header">
+    <h1>
+      <mat-icon class="title-icon">apps</mat-icon>
+      Icons Aggregator
+    </h1>
+
+    <app-provider-selector
+      (providerChange)="onProviderChange($event)"
+    ></app-provider-selector>
+  </header>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="search-box">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Search icons by name (e.g., 'home', 'search', 'user')..."
+        (keyup.enter)="onSearch()"
+        class="search-input"
+        matInput
+      />
+
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="onSearch()"
+        [disabled]="!searchQuery.trim() || isLoading"
+        class="search-btn"
+      >
+        <mat-icon>search</mat-icon>
+        {{ isLoading && currentMode === "search" ? "Searching..." : "Search" }}
+      </button>
+    </div>
+
+    <button
+      mat-stroked-button
+      color="accent"
+      (click)="onRandom()"
+      [disabled]="isLoading"
+      class="random-btn"
+    >
+      <mat-icon>shuffle</mat-icon>
+      {{ isLoading && currentMode === "random" ? "Loading..." : "Random 10" }}
+    </button>
+  </div>
+
+  <!-- Results Info -->
+  <div class="results-info" *ngIf="icons.length > 0 || searchQuery.trim()">
+    <p class="result-count">{{ getResultCountText() }}</p>
+    <p class="provider-info">Provider: {{ currentProvider }}</p>
+  </div>
+
+  <!-- Icons Grid -->
+  <div class="icons-grid" *ngIf="icons.length > 0">
+    <app-icon-card
+      *ngFor="let icon of icons"
+      [icon]="icon"
+      (download)="onDownload($event)"
+    ></app-icon-card>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="icons.length === 0 && !isLoading">
+    <mat-icon class="empty-icon">apps</mat-icon>
+    <h2>No Icons Found</h2>
+    <p *ngIf="searchQuery.trim()">
+      No icons found for "{{ searchQuery }}" in {{ currentProvider }}
+    </p>
+    <p *ngIf="!searchQuery.trim()">
+      Click "Random 10" to load icons from {{ currentProvider }}
+    </p>
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="onRandom()"
+      class="try-again-btn"
+    >
+      <mat-icon>refresh</mat-icon>
+      Load Random Icons
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-section" *ngIf="isLoading">
+    <app-loading-spinner
+      [message]="
+        'Loading ' +
+        (currentMode === 'search' ? 'search results' : 'random icons') +
+        ' from ' +
+        currentProvider
+      "
+    ></app-loading-spinner>
+  </div>
+
+  <!-- Load More / Footer -->
+  <div class="footer" *ngIf="!isLoading">
+    <button
+      *ngIf="hasMore && icons.length > 0"
+      mat-stroked-button
+      color="accent"
+      (click)="onLoadMore()"
+      class="load-more-btn"
+    >
+      <mat-icon>expand_more</mat-icon>
+      Load More ({{ currentProvider }})
+    </button>
+  </div>
+</div>

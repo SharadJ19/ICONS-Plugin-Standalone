@@ -1,0 +1,157 @@
+/* src\app\pages\home\home.component.css */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #eee;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-icon {
+  color: #ff9100;
+  font-size: 26px;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  flex: 1;
+  display: flex;
+  gap: 12px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.search-input:focus {
+  border-color: #ff9100;
+  outline: none;
+}
+
+.search-btn,
+.random-btn {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.search-btn {
+  background: #ff9100;
+  color: white;
+  border: none;
+}
+
+.search-btn:hover {
+  background: #e68200;
+}
+
+.random-btn {
+  background: white;
+  border: 1px solid #ff9100;
+  color: #ff9100;
+}
+
+.random-btn:hover {
+  background: rgba(255, 145, 0, 0.08);
+}
+
+.results-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.icons-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .icons-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .icons-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .icons-grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 0;
+  color: #777;
+}
+
+.empty-icon {
+  font-size: 64px;
+  color: #eee;
+  margin-bottom: 16px;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.load-more-btn {
+  padding: 12px 32px;
+  border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+  }
+
+  .search-box {
+    flex-direction: column;
+  }
+
+  .search-btn,
+  .random-btn {
+    width: 100%;
+  }
+}
