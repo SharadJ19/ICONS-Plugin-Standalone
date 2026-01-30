@@ -1,0 +1,124 @@
+/* src\app\components\provider-selector\provider-selector.component.css */
+
+.provider-selector {
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+}
+
+.filter-btn {
+  width: 100%;
+  height: 44px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  border-color: #ff9100;
+}
+
+.filter-btn:active {
+  transform: scale(0.98);
+}
+
+.filter-btn .filter-icon {
+  font-size: 20px;
+  color: #ff9100;
+}
+
+.filter-btn span,
+.filter-btn {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-icon {
+  font-size: 22px;
+  color: #666;
+  transition: transform 0.2s ease;
+}
+
+.provider-selector .open + .dropdown-icon,
+.provider-selector.open .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  z-index: 9999;
+  overflow: hidden;
+  animation: fadeIn 0.15s ease;
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 13px;
+  background: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 145, 0, 0.08);
+  color: #ff9100;
+}
+
+.dropdown-item.active {
+  background: rgba(255, 145, 0, 0.12);
+  color: #ff9100;
+  font-weight: 500;
+}
+
+.provider-name {
+  flex: 1;
+  text-align: left;
+}
+
+.check-icon {
+  font-size: 18px;
+  color: #ff9100;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .provider-selector {
+    max-width: 100%;
+  }
+
+  .dropdown-item {
+    padding: 14px;
+    font-size: 14px;
+  }
+}
