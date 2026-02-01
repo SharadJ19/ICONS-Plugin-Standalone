@@ -1,5 +1,4 @@
-<!-- src\app\pages\home\home.component.html -->
-
+<!-- src/app/pages/home/home.component.html -->
 <div class="container">
   <!-- Header -->
   <header class="header">
@@ -16,20 +15,22 @@
   <!-- Controls -->
   <div class="controls">
     <div class="search-box">
-      <input
-        type="text"
-        [(ngModel)]="searchQuery"
-        placeholder="Search icons by name (e.g., 'home', 'search', 'user')..."
-        (keyup.enter)="onSearch()"
-        class="search-input"
-        matInput
-      />
+      <div class="search-input-wrapper">
+        <input
+          type="text"
+          [formControl]="searchControl"
+          placeholder="Search icons by name..."
+          class="search-input"
+          #searchInput
+        />
+        <mat-icon class="search-icon">search</mat-icon>
+      </div>
 
       <button
         mat-raised-button
         color="accent"
         (click)="onSearch()"
-        [disabled]="!searchQuery.trim() || isLoading"
+        [disabled]="!searchControl.value?.trim() || isLoading"
         class="search-btn"
       >
         <mat-icon>search</mat-icon>
@@ -45,12 +46,12 @@
       class="random-btn"
     >
       <mat-icon>shuffle</mat-icon>
-      {{ isLoading && currentMode === "random" ? "Loading..." : "Random 10" }}
+      {{ isLoading && currentMode === "random" ? "Loading..." : "Random" }}
     </button>
   </div>
 
   <!-- Results Info -->
-  <div class="results-info" *ngIf="icons.length > 0 || searchQuery.trim()">
+  <div class="results-info" *ngIf="icons.length > 0 || searchControl.value?.trim()">
     <p class="result-count">{{ getResultCountText() }}</p>
     <p class="provider-info">Provider: {{ currentProvider }}</p>
   </div>
@@ -68,11 +69,11 @@
   <div class="empty-state" *ngIf="icons.length === 0 && !isLoading">
     <mat-icon class="empty-icon">apps</mat-icon>
     <h2>No Icons Found</h2>
-    <p *ngIf="searchQuery.trim()">
-      No icons found for "{{ searchQuery }}" in {{ currentProvider }}
+    <p *ngIf="searchControl.value?.trim()">
+      No icons found for "{{ searchControl.value }}" in {{ currentProvider }}
     </p>
-    <p *ngIf="!searchQuery.trim()">
-      Click "Random 10" to load icons from {{ currentProvider }}
+    <p *ngIf="!searchControl.value?.trim()">
+      Click "Random" to load icons from {{ currentProvider }}
     </p>
     <button
       mat-raised-button
@@ -94,6 +95,7 @@
         ' from ' +
         currentProvider
       "
+      size="large"
     ></app-loading-spinner>
   </div>
 
@@ -105,9 +107,10 @@
       color="accent"
       (click)="onLoadMore()"
       class="load-more-btn"
+      [disabled]="isLoading"
     >
       <mat-icon>expand_more</mat-icon>
-      Load More ({{ currentProvider }})
+      Load More
     </button>
   </div>
 </div>

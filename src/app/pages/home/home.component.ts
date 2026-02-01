@@ -1,60 +1,92 @@
-// src\app\pages\home\home.component.ts
-
-import { Component, OnInit } from '@angular/core';
+// src/app/pages/home/home.component.ts
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil, finalize } from 'rxjs';
 import { Icon } from '../../core/models/icon.model';
-import { IconAggregatorService } from '../../core/services/icon-aggregator.service';
+import { IconApiResponse } from '../../core/models/icon.model';
+import { ProviderRegistryService } from '../../core/services/providers/provider-registry.service';
 import { DownloadService } from '../../core/services/download.service';
+import { EnvironmentService } from '../../core/services/environment.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+  @ViewChild('searchInput') searchInput!: ElementRef;
+  
   icons: Icon[] = [];
-  searchQuery = '';
+  searchControl = new FormControl('');
   isLoading = false;
   currentProvider = 'Iconoir';
-
+  
   private offset = 0;
-  private readonly limit = 10;
-  public hasMore = true;
-  public currentMode: 'search' | 'random' = 'random';
+  private readonly limit = 16;
+  hasMore = true;
+  currentMode: 'search' | 'random' = 'random';
   private totalIcons = 0;
+  
+  private destroy$ = new Subject<void>();
 
   constructor(
-    private iconAggregator: IconAggregatorService,
+    private providerRegistry: ProviderRegistryService,
     private downloadService: DownloadService,
+    private environment: EnvironmentService
   ) {}
 
   ngOnInit(): void {
+    this.setupSearch();
+    this.setupProvider();
     this.loadRandomIcons();
   }
 
-  onSearch(): void {
-    if (this.searchQuery.trim()) {
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private setupSearch(): void {
+    this.searchControl.valueChanges.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
+    ).subscribe(query => {
+      if (query && query.trim()) {
+        this.onSearch(query);
+      }
+    });
+  }
+
+  private setupProvider(): void {
+    const activeProvider = this.providerRegistry.getActiveProvider();
+    if (activeProvider) {
+      this.currentProvider = activeProvider.displayName;
+    }
+  }
+
+  onSearch(query?: string): void {
+    const searchQuery = query || this.searchControl.value || '';
+    if (searchQuery.trim()) {
       this.currentMode = 'search';
-      this.offset = 0;
-      this.icons = [];
-      this.hasMore = true;
-      this.loadSearchResults();
+      this.resetPagination();
+      this.loadSearchResults(searchQuery);
     }
   }
 
   onRandom(): void {
     this.currentMode = 'random';
-    this.searchQuery = '';
-    this.offset = 0;
-    this.icons = [];
-    this.hasMore = true;
+    this.searchControl.setValue('');
+    this.resetPagination();
     this.loadRandomIcons();
   }
 
   onLoadMore(): void {
     if (this.hasMore && !this.isLoading) {
       this.offset += this.limit;
+      
       if (this.currentMode === 'search') {
-        this.loadSearchResults();
+        this.loadSearchResults(this.searchControl.value || '');
       } else {
         this.loadRandomIcons();
       }
@@ -62,85 +94,76 @@ export class HomeComponent implements OnInit {
   }
 
   onProviderChange(providerName: string): void {
-    this.currentProvider = providerName;
-    this.offset = 0;
-    this.icons = [];
-    this.hasMore = true;
-
-    // Update the display name
-    const providers = this.iconAggregator.getAvailableProviders();
-    const provider = providers.find((p) => p.name === providerName);
-    this.currentProvider = provider?.displayName || providerName;
-
-    if (this.currentMode === 'search' && this.searchQuery.trim()) {
-      this.loadSearchResults();
-    } else {
-      this.loadRandomIcons();
+    if (this.providerRegistry.setActiveProvider(providerName)) {
+      const provider = this.providerRegistry.getActiveProvider();
+      this.currentProvider = provider?.displayName || providerName;
+      this.resetPagination();
+      
+      if (this.currentMode === 'search' && this.searchControl.value?.trim()) {
+        this.loadSearchResults(this.searchControl.value);
+      } else {
+        this.loadRandomIcons();
+      }
     }
   }
 
   onDownload(icon: Icon): void {
-    this.downloadService
-      .downloadIcon(icon)
-      .then(() => {
-        console.log(`Downloaded: ${icon.name}`);
-      })
-      .catch((error) => {
-        console.error('Download failed:', error);
-      });
+    this.downloadService.downloadIcon(icon).catch(error => {
+      console.error('Download failed:', error);
+    });
   }
 
-  private loadSearchResults(): void {
-    if (!this.searchQuery.trim()) {
-      this.onRandom();
-      return;
-    }
+  private resetPagination(): void {
+    this.offset = 0;
+    this.icons = [];
+    this.hasMore = true;
+  }
 
+  private loadSearchResults(query: string): void {
     this.isLoading = true;
-    this.iconAggregator
-      .search(this.searchQuery, this.limit, this.offset)
+    this.providerRegistry.search(query, this.limit, this.offset)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.isLoading = false)
+      )
       .subscribe({
-        next: (response) => {
-          this.icons = [...this.icons, ...response.data];
-          this.totalIcons = response.pagination.total;
-          this.hasMore = response.pagination.hasNext;
-          this.isLoading = false;
-
-          // If no results, show message
-          if (this.icons.length === 0) {
-            console.log('No icons found for search:', this.searchQuery);
-          }
-        },
-        error: (error) => {
-          console.error('Search error:', error);
-          this.isLoading = false;
-          this.hasMore = false;
-        },
+        next: response => this.handleResponse(response),
+        error: error => this.handleError(error)
       });
   }
 
   private loadRandomIcons(): void {
     this.isLoading = true;
-    this.iconAggregator.getRandom(this.limit, this.offset).subscribe({
-      next: (response) => {
-        this.icons = [...this.icons, ...response.data];
-        this.totalIcons = response.pagination.total;
-        this.hasMore = response.pagination.hasNext;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Random icons error:', error);
-        this.isLoading = false;
-        this.hasMore = false;
-      },
-    });
+    this.providerRegistry.getRandom(this.limit, this.offset)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.isLoading = false)
+      )
+      .subscribe({
+        next: response => this.handleResponse(response),
+        error: error => this.handleError(error)
+      });
+  }
+
+  private handleResponse(response: IconApiResponse): void {
+    this.icons = [...this.icons, ...response.data];
+    this.totalIcons = response.pagination.total;
+    this.hasMore = response.pagination.hasNext;
+  }
+
+  private handleError(error: any): void {
+    console.error('API Error:', error);
+    this.hasMore = false;
+    // You could show a toast notification here
   }
 
   getResultCountText(): string {
     if (this.isLoading) return 'Loading...';
     if (this.icons.length === 0) return 'No icons found';
-
-    const totalText = this.totalIcons > 0 ? ` of ${this.totalIcons}` : '';
-    return `Showing ${this.icons.length}${totalText} icons`;
+    
+    if (this.totalIcons > 0) {
+      return `Showing ${this.icons.length} of ${this.totalIcons} icons`;
+    }
+    return `Showing ${this.icons.length} icons`;
   }
 }
