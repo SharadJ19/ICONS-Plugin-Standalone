@@ -1,33 +1,41 @@
-// src\app\components\provider-selector\provider-selector.component.ts
-
+// src/app/components/provider-selector/provider-selector.component.ts
 import {
   Component,
   OnInit,
   Output,
   EventEmitter,
   HostListener,
+  Input,
 } from '@angular/core';
-import { IconAggregatorService } from '../../core/services/icon-aggregator.service';
+import { ProviderRegistryService } from '../../core/services/providers/provider-registry.service';
 
 @Component({
   selector: 'app-provider-selector',
   templateUrl: './provider-selector.component.html',
   styleUrls: ['./provider-selector.component.css']
 })
-
 export class ProviderSelectorComponent implements OnInit {
   providers: Array<{ name: string; displayName: string }> = [];
-  selectedProvider = 'ICONOIR';
-  selectedDisplayName = 'Iconoir';
+  selectedProvider = '';
+  selectedDisplayName = '';
   isDropdownOpen = false;
 
+  @Input() compact = false;
   @Output() providerChange = new EventEmitter<string>();
 
-  constructor(private iconAggregator: IconAggregatorService) {}
+  constructor(private providerRegistry: ProviderRegistryService) {}
 
   ngOnInit(): void {
-    this.providers = this.iconAggregator.getAvailableProviders();
-    this.updateDisplayName();
+    this.providers = this.providerRegistry.getProviders();
+    const activeProvider = this.providerRegistry.getActiveProvider();
+    
+    if (activeProvider) {
+      this.selectedProvider = activeProvider.name;
+      this.selectedDisplayName = activeProvider.displayName;
+    } else if (this.providers.length > 0) {
+      this.selectedProvider = this.providers[0].name;
+      this.selectedDisplayName = this.providers[0].displayName;
+    }
   }
 
   toggleDropdown(): void {
@@ -36,17 +44,11 @@ export class ProviderSelectorComponent implements OnInit {
 
   selectProvider(providerName: string): void {
     this.selectedProvider = providerName;
-    this.updateDisplayName();
+    const provider = this.providers.find(p => p.name === providerName);
+    this.selectedDisplayName = provider?.displayName || providerName;
     this.isDropdownOpen = false;
-    this.iconAggregator.setActiveProvider(providerName);
+    this.providerRegistry.setActiveProvider(providerName);
     this.providerChange.emit(providerName);
-  }
-
-  private updateDisplayName(): void {
-    const provider = this.providers.find(
-      (p) => p.name === this.selectedProvider,
-    );
-    this.selectedDisplayName = provider?.displayName || this.selectedProvider;
   }
 
   @HostListener('document:click', ['$event'])
