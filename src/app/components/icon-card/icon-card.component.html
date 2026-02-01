@@ -1,5 +1,4 @@
-<!-- src\app\components\icon-card\icon-card.component.html -->
-
+<!-- src/app/components/icon-card/icon-card.component.html -->
 <div class="icon-card">
   <div class="icon-preview" [innerHTML]="svgContent"></div>
 
@@ -11,6 +10,7 @@
         class="download-btn"
         (click)="onDownload()"
         matTooltip="Download SVG"
+        aria-label="Download icon"
       >
         <mat-icon>download</mat-icon>
       </button>
