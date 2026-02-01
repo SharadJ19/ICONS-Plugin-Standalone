@@ -1,5 +1,4 @@
-// src\app\core\services\providers\icon-provider.interface.ts
-
+// src/app/core/services/providers/icon-provider.interface.ts
 import { Observable } from 'rxjs';
 import { IconApiResponse } from '../../models/icon.model';
 
@@ -7,7 +6,6 @@ export interface IconProvider {
   readonly name: string;
   readonly displayName: string;
   readonly baseUrl: string;
-  readonly iconPath: string;
 
   search(
     query: string,
