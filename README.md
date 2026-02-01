@@ -44,6 +44,10 @@ src/
 └── environments/        ⚙️ Environment configuration
 ```
 
+For a detailed breakdown of system design, architectural decisions, design patterns, and scalability considerations, see:
+
+📘 **[Architecture Documentation](ARCHITECTURE.md)**
+
 ## 🔌 Provider System (Extensible Design)
 
 Each provider implements a common interface:
