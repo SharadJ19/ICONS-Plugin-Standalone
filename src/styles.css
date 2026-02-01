@@ -1,64 +1,74 @@
-/* src\styles.css */
-
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+html,
+body {
+  height: 100%;
 }
 
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: #ffffff;
-  color: #222;
-  line-height: 1.5;
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
+.mat-mdc-raised-button.mat-accent {
+  background: linear-gradient(135deg, #ff9100 0%, #e68200 100%);
 }
 
-::-webkit-scrollbar-thumb {
-  background: #ff9100;
-  border-radius: 4px;
+.mat-mdc-raised-button.mat-accent .mdc-button__label,
+.mat-mdc-raised-button.mat-accent .mat-icon {
+  color: #ffffff;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #e68200;
+.mat-mdc-raised-button.mat-accent:disabled {
+  opacity: 0.7;
 }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
-  outline: none;
+.mat-mdc-raised-button.mat-accent:disabled .mdc-button__label,
+.mat-mdc-raised-button.mat-accent:disabled .mat-icon {
+  color: #ffffff;
 }
 
-svg {
-  display: block;
+.mat-mdc-outlined-button.mat-accent {
+  border-color: #ff9100;
 }
 
-.mat-raised-button.mat-accent {
-  background-color: #ff9100 !important;
-  color: white !important;
+.mat-mdc-outlined-button.mat-accent .mdc-button__label,
+.mat-mdc-outlined-button.mat-accent .mat-icon {
+  color: #ff9100;
 }
 
-.mat-stroked-button.mat-accent {
-  border-color: #ff9100 !important;
-  color: #ff9100 !important;
+.mat-mdc-outlined-button.mat-accent:hover {
+  background: rgba(255, 145, 0, 0.08);
 }
 
-.mat-stroked-button.mat-accent:hover {
-  background: rgba(255, 145, 0, 0.08) !important;
+
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+.mt-4 { margin-top: 1.5rem; }
+.mt-5 { margin-top: 2rem; }
+
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+.mb-5 { margin-bottom: 2rem; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-svg {
-  max-width: 100%;
-  max-height: 100%;
-}
-
-.mat-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+*:focus-visible {
+  outline: 2px solid #ff9100;
+  outline-offset: 2px;
 }
