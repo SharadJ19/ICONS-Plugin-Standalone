@@ -1,5 +1,4 @@
-// src\app\core\models\api-response.model.ts
-
+// src/app/core/models/api-response.model.ts
 export interface GitHubApiResponse {
   name: string;
   path: string;
