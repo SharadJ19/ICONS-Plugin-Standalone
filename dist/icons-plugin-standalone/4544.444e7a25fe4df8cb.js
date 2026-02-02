@@ -1,1 +1,0 @@
-(self.webpackChunkicons_plugin_standalone=self.webpackChunkicons_plugin_standalone||[]).push([[4544,2163],{2163:(o,s,n)=>{n.r(s),n.d(s,{VERSION:()=>l});const l=new(n(6903).Version)("16.2.14")}}]);
