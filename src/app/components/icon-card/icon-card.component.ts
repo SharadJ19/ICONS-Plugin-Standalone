@@ -1,5 +1,12 @@
 // src/app/components/icon-card/icon-card.component.ts
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { Icon } from '../../core/models/icon.model';
 import { DownloadService } from '../../core/services/download.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -16,7 +23,7 @@ export class IconCardComponent implements OnInit, OnDestroy {
   @Output() download = new EventEmitter<Icon>();
 
   svgContent: SafeHtml = '';
-  
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -38,12 +45,14 @@ export class IconCardComponent implements OnInit, OnDestroy {
   }
 
   private loadSvg(): void {
-    this.downloadService.getSvgContent(this.icon)
+    this.downloadService
+      .getSvgContent(this.icon)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (content) => {
           const cleanContent = this.sanitizeSvg(content);
-          this.svgContent = this.sanitizer.bypassSecurityTrustHtml(cleanContent);
+          this.svgContent =
+            this.sanitizer.bypassSecurityTrustHtml(cleanContent);
         },
         error: () => {
           this.setFallbackSvg();
@@ -53,7 +62,7 @@ export class IconCardComponent implements OnInit, OnDestroy {
 
   private setFallbackSvg(): void {
     const fallbackSvg = `
-      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ff9100" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ff9100" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="8" x2="12" y2="16"></line>
         <line x1="8" y1="12" x2="16" y2="12"></line>
@@ -62,6 +71,7 @@ export class IconCardComponent implements OnInit, OnDestroy {
   }
 
   private sanitizeSvg(content: string): string {
+    // Only remove dangerous content, don't modify SVG attributes
     return content
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
       .replace(/on\w+="[^"]*"/g, '')

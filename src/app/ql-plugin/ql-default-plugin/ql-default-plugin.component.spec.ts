@@ -8,7 +8,7 @@ describe('QlDefaultPluginComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [QlDefaultPluginComponent]
+      declarations: [QlDefaultPluginComponent],
     });
     fixture = TestBed.createComponent(QlDefaultPluginComponent);
     component = fixture.componentInstance;

@@ -27,8 +27,7 @@
       </div>
 
       <button
-        mat-raised-button
-        color="accent"
+        mat-button
         (click)="onSearch()"
         [disabled]="!searchControl.value?.trim() || isLoading"
         class="search-btn"
@@ -39,8 +38,7 @@
     </div>
 
     <button
-      mat-stroked-button
-      color="accent"
+      mat-button
       (click)="onRandom()"
       [disabled]="isLoading"
       class="random-btn"
@@ -51,7 +49,10 @@
   </div>
 
   <!-- Results Info -->
-  <div class="results-info" *ngIf="icons.length > 0 || searchControl.value?.trim()">
+  <div
+    class="results-info"
+    *ngIf="icons.length > 0 || searchControl.value?.trim()"
+  >
     <p class="result-count">{{ getResultCountText() }}</p>
     <p class="provider-info">Provider: {{ currentProvider }}</p>
   </div>
@@ -76,8 +77,7 @@
       Click "Random" to load icons from {{ currentProvider }}
     </p>
     <button
-      mat-raised-button
-      color="accent"
+      mat-button
       (click)="onRandom()"
       class="try-again-btn"
     >
@@ -103,8 +103,7 @@
   <div class="footer" *ngIf="!isLoading">
     <button
       *ngIf="hasMore && icons.length > 0"
-      mat-stroked-button
-      color="accent"
+      mat-button
       (click)="onLoadMore()"
       class="load-more-btn"
       [disabled]="isLoading"

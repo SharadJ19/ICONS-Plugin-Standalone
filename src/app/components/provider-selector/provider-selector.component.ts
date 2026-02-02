@@ -9,14 +9,11 @@ import {
 } from '@angular/core';
 import { ProviderRegistryService } from '../../core/services/providers/provider-registry.service';
 
-
 @Component({
   selector: 'app-provider-selector',
   templateUrl: './provider-selector.component.html',
   styleUrls: ['./provider-selector.component.css'],
 })
-
-
 export class ProviderSelectorComponent implements OnInit {
   providers: Array<{ name: string; displayName: string }> = [];
   selectedProvider = '';

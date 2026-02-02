@@ -7,11 +7,23 @@ import { EnvironmentService } from './core/services/environment.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  template: `
+    <!-- Main container -->
+    <div class="app-container">
+      <!-- You can keep your header or remove it for plugin usage
+      <header class="app-header" *ngIf="!isPluginMode">
+        <h1>{{ title }}</h1>
+      </header> -->
+      
+      <!-- Plugin content will be rendered here -->
+      <router-outlet></router-outlet>
+    </div>
+  `,
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'Icons Aggregator';
+  title = 'Icons Plugin Standalone';
+  isPluginMode = false;
 
   constructor(
     private providerRegistry: ProviderRegistryService,
@@ -23,6 +35,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.registerProviders();
     this.checkToken();
+    
+    // Check if we're in plugin mode
+    this.isPluginMode = window.location.search.includes('plugin=true');
   }
 
   private registerProviders(): void {

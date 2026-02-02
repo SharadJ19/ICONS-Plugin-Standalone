@@ -1,9 +1,10 @@
-/* src/app/components/icon-card/icon-card.component.css */
+/* src/app/components/icon-card/icon-card.component.css - REVERT TO THIS */
 :host {
   display: block;
   height: 100%;
 }
 
+/* Add this ONE line to icon-card.component.css */
 .icon-card {
   border: 1px solid #e2e8f0;
   border-radius: 12px;
@@ -15,6 +16,7 @@
   height: 100%;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  width: 100%; /* ADD THIS LINE */
 }
 
 .icon-card:hover {
@@ -33,7 +35,7 @@
   min-height: 140px;
 }
 
-.icon-preview svg {
+.icon-preview ::ng-deep svg {
   width: 48px;
   height: 48px;
   max-width: 100%;
@@ -43,7 +45,7 @@
   transition: transform 0.3s ease;
 }
 
-.icon-card:hover .icon-preview svg {
+.icon-card:hover .icon-preview ::ng-deep svg {
   transform: scale(1.1);
 }
 
