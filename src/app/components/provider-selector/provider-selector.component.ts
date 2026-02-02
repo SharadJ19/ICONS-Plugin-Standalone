@@ -9,11 +9,14 @@ import {
 } from '@angular/core';
 import { ProviderRegistryService } from '../../core/services/providers/provider-registry.service';
 
+
 @Component({
   selector: 'app-provider-selector',
   templateUrl: './provider-selector.component.html',
-  styleUrls: ['./provider-selector.component.css']
+  styleUrls: ['./provider-selector.component.css'],
 })
+
+
 export class ProviderSelectorComponent implements OnInit {
   providers: Array<{ name: string; displayName: string }> = [];
   selectedProvider = '';
@@ -28,7 +31,7 @@ export class ProviderSelectorComponent implements OnInit {
   ngOnInit(): void {
     this.providers = this.providerRegistry.getProviders();
     const activeProvider = this.providerRegistry.getActiveProvider();
-    
+
     if (activeProvider) {
       this.selectedProvider = activeProvider.name;
       this.selectedDisplayName = activeProvider.displayName;
@@ -44,7 +47,7 @@ export class ProviderSelectorComponent implements OnInit {
 
   selectProvider(providerName: string): void {
     this.selectedProvider = providerName;
-    const provider = this.providers.find(p => p.name === providerName);
+    const provider = this.providers.find((p) => p.name === providerName);
     this.selectedDisplayName = provider?.displayName || providerName;
     this.isDropdownOpen = false;
     this.providerRegistry.setActiveProvider(providerName);

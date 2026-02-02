@@ -8,7 +8,7 @@ import { EnvironmentService } from './core/services/environment.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   title = 'Icons Aggregator';
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
     private providerRegistry: ProviderRegistryService,
     private iconoirProvider: IconoirProviderService,
     private bootstrapProvider: BootstrapProviderService,
-    private environment: EnvironmentService
+    private environment: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -29,15 +29,15 @@ export class AppComponent implements OnInit {
     this.providerRegistry.registerProvider(
       'ICONOIR',
       'Iconoir',
-      this.iconoirProvider
+      this.iconoirProvider,
     );
-    
+
     this.providerRegistry.registerProvider(
       'BOOTSTRAP',
       'Bootstrap',
-      this.bootstrapProvider
+      this.bootstrapProvider,
     );
-    
+
     const defaultProvider = this.environment.uiConfig.defaultProvider;
     this.providerRegistry.setActiveProvider(defaultProvider);
   }
@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
     if (!this.environment.githubToken && !this.environment.production) {
       console.warn(
         '⚠️ GitHub token not found. API requests may be rate limited.\n' +
-        'Set token in localStorage: localStorage.setItem("github_token", "your_token_here")'
+          'Set token in localStorage: localStorage.setItem("github_token", "your_token_here")',
       );
     }
   }

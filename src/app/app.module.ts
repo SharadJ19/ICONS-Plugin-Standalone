@@ -19,6 +19,7 @@ import { IconCardComponent } from './components/icon-card/icon-card.component';
 import { ProviderSelectorComponent } from './components/provider-selector/provider-selector.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { ApiInterceptor } from './core/interceptors/api.interceptor';
+import { QlPluginModule } from './ql-plugin/ql-plugin.module';
 
 @NgModule({
   declarations: [
@@ -39,13 +40,14 @@ import { ApiInterceptor } from './core/interceptors/api.interceptor';
     MatTooltipModule,
     MatFormFieldModule,
     MatProgressSpinnerModule,
+    QlPluginModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })
