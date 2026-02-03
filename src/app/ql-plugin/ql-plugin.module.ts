@@ -42,4 +42,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     LoadingSpinnerComponent,
   ],
 })
-export class QlPluginModule {}
+export class QlPluginModule {
+  static rootComponent = QlDefaultPluginComponent;
+}
